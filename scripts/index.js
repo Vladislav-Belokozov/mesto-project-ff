@@ -72,7 +72,7 @@ const likeHeart = (event) => {
 /* функция новое место */
   const submitAddCard = (event) => {
     event.preventDefault();
-    renderElements({
+    renderElement({
       name: popupInputPlaceTitle.value,
       link: popupInputPlaceLink.value,
     });
@@ -81,41 +81,42 @@ const likeHeart = (event) => {
   };
 
 /* добавление карточек */
-const generateElementList = (cardData) => {
-  const templateElements = elementsTemplate.cloneNode(true);
-  const titleNewElements = templateElements.querySelector(".elements__title");
-  const likeElementsHeart = templateElements.querySelector(".elements__heart");
-  const elementsDelete = templateElements.querySelector(".elements__delete");
-  const elementsImgCard = templateElements.querySelector(".elements__image");
-  const titleElements = templateElements.querySelector(".elements__title");
+  const createCard = (cardData) => {
+  const templateElement = elementsTemplate.cloneNode(true);
+  const titleNewElements = templateElement.querySelector(".elements__title");
+  const likeElementsHeart = templateElement.querySelector(".elements__heart");
+  const elementsDelete = templateElement.querySelector(".elements__delete");
+  const elementsImgCard = templateElement.querySelector(".elements__image");
+  const titleElement = templateElement.querySelector(".elements__title");
 
   elementsImgCard.src = cardData.link;
+  elementsImgCard.alt = cardData.alt;
   titleNewElements.textContent = cardData.name;
 
   function handleElementsCard() {
     popupImageCard.src = elementsImgCard.src;
-    popupImageCard.alt = titleElements.textContent;
-    popupTitleCard.textContent = titleElements.textContent;
+    popupImageCard.alt = titleElement.textContent;
+    popupTitleCard.textContent = titleElement.textContent;
     openPopup(popupCardPhoto);
   }
 
   elementsImgCard.addEventListener("click", handleElementsCard);
-  elementsDelete.addEventListener("click", handleDeleteCard);
+  elementsDelete.addEventListener("click", () => handleDeleteCard(cardId));
   likeElementsHeart.addEventListener("click", likeHeart);
   
-  return templateElements;
+  return templateElement;
   };
 
   const handleDeleteCard = (event) => {
     event.target.closest(".elements__item").remove();
   };
 
-  const renderElements = (cardData) => {
-    elementsList.prepend(generateElementList(cardData));
+  const renderElement = (cardData) => {
+    elementsList.prepend(createCard(cardData));
   };
 
   containerCards.forEach((cardData) => {
-    renderElements(cardData);
+    renderElement(cardData);
   });
 
 
