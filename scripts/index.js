@@ -81,7 +81,7 @@ const likeHeart = (event) => {
   };
 
 /* добавление карточек */
-  const createCard = (cardData) => {
+const createCard = (cardData, deleteCallback) => {
   const templateElement = elementsTemplate.cloneNode(true);
   const titleNewElements = templateElement.querySelector(".elements__title");
   const likeElementsHeart = templateElement.querySelector(".elements__heart");
@@ -101,23 +101,28 @@ const likeHeart = (event) => {
   }
 
   elementsImgCard.addEventListener("click", handleElementsCard);
-  elementsDelete.addEventListener("click", () => handleDeleteCard(cardId));
+  
+  // Привязал колбэк удаления (deleteCallback)
+  elementsDelete.addEventListener("click", (event) => {
+    deleteCallback(event);  // Вызывал переданный колбэк
+  });
+
   likeElementsHeart.addEventListener("click", likeHeart);
   
   return templateElement;
-  };
+};
 
-  const handleDeleteCard = (event) => {
-    event.target.closest(".elements__item").remove();
-  };
+const handleDeleteCard = (event) => {
+  event.target.closest(".elements__item").remove();
+};
 
-  const renderElement = (cardData) => {
-    elementsList.prepend(createCard(cardData));
-  };
+const renderElement = (cardData) => {
+  elementsList.prepend(createCard(cardData, handleDeleteCard)); // Передал колбэк
+};
 
-  containerCards.forEach((cardData) => {
-    renderElement(cardData);
-  });
+containerCards.forEach((cardData) => {
+  renderElement(cardData);
+});
 
 
 /* обработчик событий попап */
